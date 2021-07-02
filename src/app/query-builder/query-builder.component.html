@@ -1,0 +1,62 @@
+<!-- <dx-select-box [dataSource]="operationDataSource" displayExpr="OperationName" valueExpr="OperationID"
+    width="200" [searchEnabled]="true">
+</dx-select-box>
+
+<dx-select-box [dataSource]="fieldDataSource" displayExpr="FieldTitle" valueExpr="FieldTypeID"
+    width="200" [searchEnabled]="true">
+</dx-select-box>
+
+<dx-select-box [dataSource]="operatorDataSource" displayExpr="OperatorName" valueExpr="OperatorID"
+    width="200" [searchEnabled]="true">
+</dx-select-box> -->
+
+<form [formGroup]="queryBuilderForm">
+    <div formArrayName="items" class="middle-control-div">
+        <!-- Binding of items with formArrayName directive -->
+        <!-- iterates over formItems so that we can have those many selectboxes for
+          Activity and checkboxes for required/Oprional to select and 
+          index ‘ i ’ to get FormControl of that particular index -->
+        <div *ngFor="let item of formItems.controls; let builderIndex=index" [formGroupName]="builderIndex">
+            <div class="query-builder-controls">
+                <div class="check-box-control">
+                    <dx-check-box formControlName="IsCheckedForGrouping">
+                    </dx-check-box>
+                    <!-- [disabled]="checkActivityIsRejectedOrNot(activityIndex)" -->
+                </div>
+                <div class="select-box-control">
+                    <dx-select-box [dataSource]="operationDataSource" formControlName="Operation"
+                        displayExpr="OperationName" valueExpr="OperationID" width="200" [searchEnabled]="true">
+                    </dx-select-box>
+                </div>
+                <div class="select-box-control">
+                    <dx-select-box [dataSource]="fieldDataSource" formControlName="Field" displayExpr="FieldTitle"
+                        valueExpr="FieldTypeID" width="200" [searchEnabled]="true">
+                    </dx-select-box>
+                </div>
+                <div class="select-box-control">
+                    <dx-select-box [dataSource]="operationDataSource" formControlName="Operator" displayExpr="OperationName"
+                        valueExpr="OperationID" width="200" [searchEnabled]="true">
+                    </dx-select-box>
+                </div>
+                <div class="select-box-control">
+                    <app-filter-builder-form-control formControlName="QueryValue">
+                    </app-filter-builder-form-control>
+                </div>
+                <div class="close-button-control" *ngIf="formItems?.controls?.length > 1">
+                    <!-- close button for each selected activity -->
+                    <a (click)="removeItem(activityIndex)">
+                        <img alt="" src="assets/images/cross-image.png" height="20" width="20">
+                    </a>
+                    <!-- close button for each selected activity -->
+                </div>
+            </div>
+        </div>
+
+        <div class="add-new-button">
+            <dx-button class="add-activity" type="success"
+                text="Add New" (click)="addNewItem($event)"></dx-button>
+        </div>
+        <!-- // iterates over formItems so that we can have those many selectboxes for 
+          Activity and checkboxes for required/Oprional to select -->
+    </div>
+</form>
