@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, forwardRef, Input, OnChanges, OnInit } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { BuilderFieldDataSource, FieldDataSource } from '../constants';
+import { availableFields, availableFieldsControlTypes, BuilderFieldDataSource, defaultQueryValueForNoFields, DxDateBoxControlDateType, FieldDataSource } from '../constants';
 
 @Component({
   selector: 'app-filter-builder-form-control',
@@ -10,18 +10,24 @@ import { BuilderFieldDataSource, FieldDataSource } from '../constants';
     {
       provide: NG_VALUE_ACCESSOR,
       multi:true,
-      useExisting: FilterBuilderFormControlComponent
+      useExisting: forwardRef(() => FilterBuilderFormControlComponent)
     }
   ]
 })
-export class FilterBuilderFormControlComponent implements OnInit, ControlValueAccessor {
+export class FilterBuilderFormControlComponent implements OnInit, ControlValueAccessor, OnChanges {
 
-  controlValue: number | string;
+  @Input() fieldTypeID: string;
+  @Input() disabled: boolean;
+
+  fieldDataSource: FieldDataSource[];
+  currentQueryControl: FieldDataSource = defaultQueryValueForNoFields;
+  availableFields = availableFields;
+  availableFieldsControlTypes = availableFieldsControlTypes;
+
+  controlValue: any;
   onChange = (controlValue) => {};
   onTouched = () => {};
   touched = false;
-  disabled = false;
-  fieldDataSource: FieldDataSource[];
 
   constructor() { }
 
@@ -29,7 +35,14 @@ export class FilterBuilderFormControlComponent implements OnInit, ControlValueAc
     this.fieldDataSource = BuilderFieldDataSource;
   }
 
-  onValueChanged($event) {
+  ngOnChanges(): void {
+    console.log(this.fieldTypeID);
+    if (this.fieldTypeID && this.fieldDataSource && this.fieldDataSource.length) {
+      this.currentQueryControl = this.fieldDataSource.find(field => field.FieldTypeID === this.fieldTypeID);
+    }
+  }
+
+  onValueChanged($event, fieldControlType) {
     this.markAsTouched();
     if ($event && !this.disabled) {
       this.controlValue = $event.value;

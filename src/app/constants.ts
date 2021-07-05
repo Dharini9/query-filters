@@ -41,7 +41,41 @@ export class FieldDataSource {
     SearchEnabled?: boolean;
     LookupID?: string;
     DataSourceType?: DataSourceType.apiResponse | DataSourceType.lookup;
+    DateControlType?: DxDateBoxControlDateType.date | DxDateBoxControlDateType.dateTime;
 }
+
+export enum availableFields {
+    skill = 'skill',
+    firstname = 'firstname',
+    company = 'company',
+    employmentType = 'employmentType',
+    jobOrderName = 'jobOrderName',
+    startDate = 'startDate',
+    endDate = 'endDate',
+    recruiters = 'recruiters'
+}
+
+export enum availableFieldsControlTypes {
+    AutoComplete = 'AutoComplete',
+    TreeView = 'TreeView',
+    TagBox = 'TagBox',
+    TextBox = 'TextBox',
+    SelectBox = 'SelectBox',
+    DateBox = 'DateBox'
+}
+
+export const defaultQueryValueForNoFields: FieldDataSource = {
+    FieldTitle: '',
+    FieldTypeID: '',
+    ControlType: 'TextBox',
+    Placeholder: '',
+    GroupIDs: []
+};
+
+export enum DxDateBoxControlDateType {
+    dateTime = 'datetime',
+    date = 'date'
+};
 
 export const BuilderFieldDataSource: FieldDataSource[] = [
     {
@@ -91,7 +125,8 @@ export const BuilderFieldDataSource: FieldDataSource[] = [
     }, {
         FieldTypeID: 'endDate',
         FieldTitle: 'End Date',
-        ControlType: 'DateTimeBox',
+        ControlType: 'DateBox',
+        DateControlType: DxDateBoxControlDateType.dateTime,
         Placeholder: 'dd/mm/yyyy hh:mm:ss',
         GroupIDs: []
     }, {

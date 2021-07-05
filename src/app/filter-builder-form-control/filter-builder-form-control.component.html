@@ -1,3 +1,39 @@
-<dx-select-box [dataSource]="fieldDataSource" displayExpr="FieldTitle" valueExpr="FieldTypeID"
+<div *ngIf="currentQueryControl">
+    <div [ngSwitch]="currentQueryControl.ControlType">
+        <div *ngSwitchCase="availableFieldsControlTypes.AutoComplete">
+            <dx-select-box [dataSource]="fieldDataSource" displayExpr="FieldTitle" valueExpr="FieldTypeID" width="200"
+                [searchEnabled]="true" width="200" (onValueChanged)="onValueChanged($event, currentQueryControl.ControlType)"
+                [disabled]="disabled">
+            </dx-select-box>
+        </div>
+        <div *ngSwitchCase="availableFieldsControlTypes.TreeView">
+            firstname
+        </div>
+        <div *ngSwitchCase="availableFieldsControlTypes.TagBox">
+            <dx-tag-box #ScheduleActivityTagBox [dataSource]="fieldDataSource" placeholder="Select" [multiline]="false"
+                displayExpr="FieldTitle" width="200" valueExpr="FieldTypeID" [showSelectionControls]="true"
+                [disabled]="disabled" (onValueChanged)="onValueChanged($event, currentQueryControl.ControlType)">
+            </dx-tag-box>
+        </div>
+        <div *ngSwitchCase="availableFieldsControlTypes.TextBox">
+            <dx-text-box [disabled]="disabled"
+                (onValueChanged)="onValueChanged($event, currentQueryControl.ControlType)"></dx-text-box>
+        </div>
+        <div *ngSwitchCase="availableFieldsControlTypes.SelectBox">
+            <dx-select-box [dataSource]="fieldDataSource" width="200" displayExpr="FieldTitle" valueExpr="FieldTypeID" width="200"
+                [searchEnabled]="true" (onValueChanged)="onValueChanged($event)" [disabled]="disabled"
+                (onValueChanged)="onValueChanged($event, currentQueryControl.ControlType)">
+            </dx-select-box>
+        </div>
+        <div *ngSwitchCase="availableFieldsControlTypes.DateBox">
+            <dx-date-box [appDate] formControlName="StartDate" width="200" [type]="currentQueryControl?.DateControlType"
+                [displayFormat]="dateDisplayFormatAccordingAllDayEvent" (onClosed)="startDateValueChanged($event)"
+                (onValueChanged)="onValueChanged($event, currentQueryControl.ControlType)">
+            </dx-date-box>
+        </div>
+    </div>
+</div>
+
+<!-- <dx-select-box [dataSource]="fieldDataSource" displayExpr="FieldTitle" valueExpr="FieldTypeID"
     width="200" [searchEnabled]="true" (onValueChanged)="onValueChanged($event)">
-</dx-select-box>
+</dx-select-box> -->

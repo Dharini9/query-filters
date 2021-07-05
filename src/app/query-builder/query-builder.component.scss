@@ -1,4 +1,45 @@
 .query-builder-controls {
-    display: flex;
-    justify-content: space-between;
+    display: inline-flex;
+    // justify-content: space-between;
+    .add-button-control {
+        padding: 8px 15px 0 15px;
+    }
+    .close-button-control {
+        padding: 8px 15px 0 15px;
+    }
+    .group-check-box-control {
+        padding: 8px 15px 0 15px;
+    }
+    .operation-box-control {
+        padding: 8px 15px 0 15px;
+    }
+    .field-box-control {
+        padding: 8px 15px 0 15px;
+    }
+    .operator-box-control {
+        padding: 8px 15px 0 15px;
+    }
+    .value-box-control {
+        padding: 8px 15px 0 15px;
+    }
+}
+
+.query-builder-labels {
+    display: inline-flex;
+    // justify-content: space-between;
+    .group-check-box-labels {
+        padding: 8px 0 0 100px;
+    }
+    .operation-box-labels {
+        padding: 8px 15px 0 15px;
+    }
+    .field-box-labels {
+        padding: 8px 15px 0 15px;
+    }
+    .operator-box-labels {
+        padding: 8px 15px 0 15px;
+    }
+    .value-box-labels {
+        padding: 8px 15px 0 15px;
+    }
 }

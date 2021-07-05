@@ -16,45 +16,71 @@
         <!-- iterates over formItems so that we can have those many selectboxes for
           Activity and checkboxes for required/Oprional to select and 
           index ‘ i ’ to get FormControl of that particular index -->
+        <div class="query-builder-labels">
+            <div class="group-check-box-labels">
+                <label>(=)</label>
+            </div>
+            <div class="operation-box-labels">
+                <label>AND/OR</label>
+            </div>
+            <div class="field-box-labels">
+                <label>Field</label>
+            </div>
+            <div class="operation-box-labels">
+                <label>Operation</label>
+            </div>
+            <div class="value-box-labels">
+                <label>Value</label>
+            </div>
+        </div>
         <div *ngFor="let item of formItems.controls; let builderIndex=index" [formGroupName]="builderIndex">
             <div class="query-builder-controls">
-                <div class="check-box-control">
+                <div class="add-button-control">
+                    <!-- add button for each selected activity -->
+                    <a (click)="addItem(builderIndex)">
+                        <i class="fa fa-plus" style="font-size:16px;color:rgb(107, 155, 218)" aria-hidden="true"></i>
+                    </a>
+                    <!-- add button for each selected activity -->
+                </div>
+                <div class="close-button-control">
+                    <!-- close button for each selected activity -->
+                    <a (click)="removeItem(builderIndex)">
+                        <i class="fa fa-times" style="font-size:16px;color:rgb(231, 103, 28)" aria-hidden="true"></i>
+                    </a>
+                    <!-- close button for each selected activity -->
+                </div>
+                <div class="group-check-box-control">
                     <dx-check-box formControlName="IsCheckedForGrouping">
                     </dx-check-box>
                     <!-- [disabled]="checkActivityIsRejectedOrNot(activityIndex)" -->
                 </div>
-                <div class="select-box-control">
+                <div class="operation-box-control" *ngIf="builderIndex > 0">
                     <dx-select-box [dataSource]="operationDataSource" formControlName="Operation"
                         displayExpr="OperationName" valueExpr="OperationID" width="200" [searchEnabled]="true">
                     </dx-select-box>
                 </div>
-                <div class="select-box-control">
+                <div class="field-box-control">
                     <dx-select-box [dataSource]="fieldDataSource" formControlName="Field" displayExpr="FieldTitle"
-                        valueExpr="FieldTypeID" width="200" [searchEnabled]="true">
+                        valueExpr="FieldTypeID" width="200" [searchEnabled]="true"
+                        (onValueChanged)="onFieldOptionChanged($event)">
                     </dx-select-box>
                 </div>
-                <div class="select-box-control">
-                    <dx-select-box [dataSource]="operationDataSource" formControlName="Operator" displayExpr="OperationName"
-                        valueExpr="OperationID" width="200" [searchEnabled]="true">
+                <div class="operator-box-control">
+                    <dx-select-box [dataSource]="availableOperatorDataSource" formControlName="Operator"
+                        displayExpr="OperatorName" valueExpr="OperatorID" width="200" [searchEnabled]="true">
                     </dx-select-box>
                 </div>
-                <div class="select-box-control">
-                    <app-filter-builder-form-control formControlName="QueryValue">
+                <div class="value-box-control">
+                    <app-filter-builder-form-control formControlName="QueryValue"
+                        [fieldTypeID]="valueSelectionAccordingToFieldSelected(builderIndex).Field"
+                        [disabled]="!valueSelectionAccordingToFieldSelected(builderIndex).Field">
                     </app-filter-builder-form-control>
-                </div>
-                <div class="close-button-control" *ngIf="formItems?.controls?.length > 1">
-                    <!-- close button for each selected activity -->
-                    <a (click)="removeItem(activityIndex)">
-                        <img alt="" src="assets/images/cross-image.png" height="20" width="20">
-                    </a>
-                    <!-- close button for each selected activity -->
                 </div>
             </div>
         </div>
 
         <div class="add-new-button">
-            <dx-button class="add-activity" type="success"
-                text="Add New" (click)="addNewItem($event)"></dx-button>
+            <dx-button class="add-activity" type="success" text="Add New" (click)="addNewItem()"></dx-button>
         </div>
         <!-- // iterates over formItems so that we can have those many selectboxes for 
           Activity and checkboxes for required/Oprional to select -->
