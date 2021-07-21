@@ -1,45 +1,131 @@
 .query-builder-controls {
-    display: inline-flex;
-    // justify-content: space-between;
-    .add-button-control {
-        padding: 8px 15px 0 15px;
-    }
-    .close-button-control {
-        padding: 8px 15px 0 15px;
-    }
-    .group-check-box-control {
-        padding: 8px 15px 0 15px;
-    }
-    .operation-box-control {
-        padding: 8px 15px 0 15px;
-    }
-    .field-box-control {
-        padding: 8px 15px 0 15px;
-    }
-    .operator-box-control {
-        padding: 8px 15px 0 15px;
-    }
-    .value-box-control {
-        padding: 8px 15px 0 15px;
-    }
+  // display: inline-flex;
+  // margin: 0 0 0 47px;
+  // justify-content: space-between;
+  .add-button-control {
+    padding: 15px 0 0 0;
+  }
+  .close-button-control {
+    padding: 15px 0px 0 12px;
+  }
+  .group-check-box-control {
+    padding: 15px 15px 0 15px;
+  }
+  .operation-box-control {
+    padding: 8px 15px 0 15px;
+  }
+  .field-box-control {
+    padding: 8px 15px 0 15px;
+  }
+  .operator-box-control {
+    padding: 8px 15px 0 15px;
+  }
+  .value-box-control {
+    padding: 8px 15px 0 15px;
+  }
 }
 
-.query-builder-labels {
-    display: inline-flex;
-    // justify-content: space-between;
-    .group-check-box-labels {
-        padding: 8px 0 0 100px;
-    }
-    .operation-box-labels {
-        padding: 8px 15px 0 15px;
-    }
-    .field-box-labels {
-        padding: 8px 15px 0 15px;
-    }
-    .operator-box-labels {
-        padding: 8px 15px 0 15px;
-    }
-    .value-box-labels {
-        padding: 8px 15px 0 15px;
-    }
+.add-new-button {
+  margin: 10px 0 0 0;
+}
+
+.create-group {
+  border-color: transparent !important;
+  background-color: #ffffff;
+  color: black;
+}
+
+// .query-builder-labels {
+//   // display: inline-flex;
+//   // justify-content: space-between;
+//   .group-check-box-labels {
+//     width: 43px;
+//     padding: 8px 0 0 100px;
+
+//     label {
+//       cursor: pointer;
+//     }
+//   }
+//   .operation-box-labels {
+//     width: 200px;
+//     padding: 8px 15px 0 15px;
+//   }
+//   .field-box-labels {
+//     width: 197px;
+//     padding: 8px 15px 0 15px;
+//   }
+//   .operator-box-labels {
+//     width: 200px;
+//     padding: 8px 15px 0 15px;
+//   }
+//   .value-box-labels {
+//     padding: 8px 15px 0 15px;
+//   }
+// }
+
+table th {
+  text-align: left;
+}
+
+.query-builder-labels div {
+  display: inline-block;
+}
+
+.group-creation-disabled label {
+  opacity: 0.4;
+  pointer-events: none;
+  cursor: none;
+}
+
+.group-brackets {
+  padding: 10px 1px 0 1px;
+  font-size: 26px;
+  min-width: 13px;
+  background: #ffe9ed;
+  border-color: #b3b3b3;
+  border-style: solid;
+  border-width: 0;
+}
+
+.group-starting-bracket {
+  min-width: 30px;
+  padding: 10px 1px 0 1px;
+  font-size: 26px;
+  background: #ffe9ed;
+  border-color: #b3b3b3;
+  border-style: solid;
+  border-width: 0;
+}
+
+.w-3 {
+  width: 3%;
+}
+.w-10 {
+  width: 10%;
+}
+.w-15 {
+  width: 15%;
+}
+.w-40 {
+  width: 40%;
+}
+
+table {
+  border-spacing: 0;
+}
+
+.top-border{
+  border-top-width: 1px;
+}
+
+.bottom-border{
+  border-bottom-width: 1px;
+}
+
+.left-border{
+  border-left-width: 1px;
+}
+
+.right-border{
+  border-right-width: 1px;
 }

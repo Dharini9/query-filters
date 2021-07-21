@@ -2,6 +2,7 @@
   "name": "query-filters",
   "version": "0.0.0",
   "scripts": {
+    "build-dev": "node --max_old_space_size=5048 ./node_modules/@angular/cli/bin/ng build --prod --base-href=/custom-search/ --aot",
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",

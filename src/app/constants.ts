@@ -42,6 +42,8 @@ export class FieldDataSource {
     LookupID?: string;
     DataSourceType?: DataSourceType.apiResponse | DataSourceType.lookup;
     DateControlType?: DxDateBoxControlDateType.date | DxDateBoxControlDateType.dateTime;
+    DisplayExpr?: string;
+    ValueExpr?: string;
 }
 
 export enum availableFields {
@@ -77,6 +79,14 @@ export enum DxDateBoxControlDateType {
     date = 'date'
 };
 
+export enum NO_OF_LINES {
+    ONE = 1,
+    TWO = 2,
+    THREE = 3,
+    FOUR = 4,
+    SIX = 6
+};
+
 export const BuilderFieldDataSource: FieldDataSource[] = [
     {
         FieldTypeID: 'skill',
@@ -85,60 +95,65 @@ export const BuilderFieldDataSource: FieldDataSource[] = [
         ControlSelectioType: ControlSelectionType.multiple,
         Placeholder: '',
         GroupIDs: []
-    }, {
-        FieldTypeID: 'firstname',
-        FieldTitle: 'First Name',
-        ControlType: 'TextBox',
-        Placeholder: 'Enter First Name Here',
-        GroupIDs: []
-    }, {
-        FieldTypeID: 'company',
-        FieldTitle: 'Company Name',
-        ControlType: 'TreeView',
-        ControlSelectioType: ControlSelectionType.single,
-        Placeholder: 'Search Company',
-        GroupIDs: [],
-        SearchEnabled: true
-    }, {
-        FieldTypeID: 'employmentType',
-        FieldTitle: 'Employment Type',
-        ControlType: 'TagBox',
-        ControlSelectioType: ControlSelectionType.multiple,
-        Placeholder: '',
-        GroupIDs: [],
-        SearchEnabled: true
-    }, {
-        FieldTypeID: 'jobOrderName',
-        FieldTitle: 'Job Order',
-        ControlType: 'SelectBox',
-        ControlSelectioType: ControlSelectionType.single,
-        Placeholder: '',
-        GroupIDs: [],
-        LookupID: 'SearchJobOrders',
-        DataSourceType: DataSourceType.apiResponse
-    }, {
-        FieldTypeID: 'startDate',
-        FieldTitle: 'Start Date',
-        ControlType: 'DateBox',
-        Placeholder: 'dd/mm/yyyy',
-        GroupIDs: []
-    }, {
-        FieldTypeID: 'endDate',
-        FieldTitle: 'End Date',
-        ControlType: 'DateBox',
-        DateControlType: DxDateBoxControlDateType.dateTime,
-        Placeholder: 'dd/mm/yyyy hh:mm:ss',
-        GroupIDs: []
-    }, {
-        FieldTypeID: 'recruiters',
-        FieldTitle: 'Recruiters',
-        ControlType: 'AutoComplete',
-        ControlSelectioType: ControlSelectionType.single,
-        Placeholder: 'Search Recruiters',
-        GroupIDs: [],
-        DataSourceType: DataSourceType.apiResponse,
-        LookupID: 'SearchRecruiters'
-    },
+    }
+    // , {
+    //     FieldTypeID: 'firstname',
+    //     FieldTitle: 'First Name',
+    //     ControlType: 'TextBox',
+    //     Placeholder: 'Enter First Name Here',
+    //     GroupIDs: []
+    // }, {
+    //     FieldTypeID: 'company',
+    //     FieldTitle: 'Company Name',
+    //     ControlType: 'TreeView',
+    //     ControlSelectioType: ControlSelectionType.single,
+    //     Placeholder: 'Search Company',
+    //     GroupIDs: [],
+    //     SearchEnabled: true
+    // }, {
+    //     FieldTypeID: 'employmentType',
+    //     FieldTitle: 'Employment Type',
+    //     ControlType: 'TagBox',
+    //     ControlSelectioType: ControlSelectionType.multiple,
+    //     Placeholder: '',
+    //     GroupIDs: [],
+    //     SearchEnabled: true
+    // }, {
+    //     FieldTypeID: 'jobOrderName',
+    //     FieldTitle: 'Job Order',
+    //     ControlType: 'SelectBox',
+    //     ControlSelectioType: ControlSelectionType.single,
+    //     Placeholder: '',
+    //     GroupIDs: [],
+    //     LookupID: 'SearchRecruiters',
+    //     DataSourceType: DataSourceType.apiResponse,
+    //     DisplayExpr: 'Text',
+    //     ValueExpr: 'Value'
+    // }, {
+    //     FieldTypeID: 'startDate',
+    //     FieldTitle: 'Start Date',
+    //     ControlType: 'DateBox',
+    //     Placeholder: 'dd/mm/yyyy',
+    //     GroupIDs: []
+    // }, {
+    //     FieldTypeID: 'endDate',
+    //     FieldTitle: 'End Date',
+    //     ControlType: 'DateBox',
+    //     DateControlType: DxDateBoxControlDateType.dateTime,
+    //     Placeholder: 'dd/mm/yyyy hh:mm:ss',
+    //     GroupIDs: []
+    // }, {
+    //     FieldTypeID: 'recruiters',
+    //     FieldTitle: 'Recruiters',
+    //     ControlType: 'AutoComplete',
+    //     ControlSelectioType: ControlSelectionType.single,
+    //     Placeholder: 'Search Recruiters',
+    //     GroupIDs: [],
+    //     DataSourceType: DataSourceType.apiResponse,
+    //     LookupID: 'SearchRecruiters',
+    //     DisplayExpr: 'Text',
+    //     ValueExpr: 'Value'
+    // },
 ];
 
 export const BuilderOperationDataSource: OperationDataSource[] = [
@@ -183,23 +198,23 @@ export const BuilderOperatorDataSource: OperatorDataSource[] = [
     }, {
         OperatorID: 9,
         OperatorName: 'Contains',
-        FieldTypeIDs: ['skill', 'firstname', 'company', 'employmentType', 'jobOrderName', 'recruiters']
+        FieldTypeIDs: ['firstname', 'company', 'employmentType', 'jobOrderName', 'recruiters']
     }, {
         OperatorID: 10,
         OperatorName: 'Starts with',
-        FieldTypeIDs: ['skill', 'firstname', 'company', 'employmentType', 'jobOrderName', 'recruiters']
+        FieldTypeIDs: ['firstname', 'company', 'employmentType', 'jobOrderName', 'recruiters']
     }, {
         OperatorID: 11,
         OperatorName: 'Ends with',
-        FieldTypeIDs: ['skill', 'firstname', 'company', 'employmentType', 'jobOrderName', 'recruiters']
+        FieldTypeIDs: ['firstname', 'company', 'employmentType', 'jobOrderName', 'recruiters']
     }, {
         OperatorID: 12,
         OperatorName: 'Does not contain',
-        FieldTypeIDs: ['skill', 'firstname', 'company', 'employmentType', 'jobOrderName', 'recruiters']
+        FieldTypeIDs: ['firstname', 'company', 'employmentType', 'jobOrderName', 'recruiters']
     }, {
         OperatorID: 8,
         OperatorName: 'Reset',
-        FieldTypeIDs: ['skill', 'firstname', 'company', 'employmentType', 'jobOrderName', 'startDate', 'endDate', 'recruiters']
+        FieldTypeIDs: ['firstname', 'company', 'employmentType', 'jobOrderName', 'startDate', 'endDate', 'recruiters']
     }
 ];
 

@@ -16,9 +16,9 @@
         <!-- iterates over formItems so that we can have those many selectboxes for
           Activity and checkboxes for required/Oprional to select and 
           index ‘ i ’ to get FormControl of that particular index -->
-        <div class="query-builder-labels">
-            <div class="group-check-box-labels">
-                <label>(=)</label>
+        <!-- <div class="query-builder-labels">
+            <div class="group-check-box-labels" [ngClass]="{'group-creation-disabled': !isReadyToCreateANewGroup}">
+                <label (click)="createNewGroup()">(=)</label>
             </div>
             <div class="operation-box-labels">
                 <label>AND/OR</label>
@@ -26,37 +26,37 @@
             <div class="field-box-labels">
                 <label>Field</label>
             </div>
-            <div class="operation-box-labels">
+            <div class="operator-box-labels">
                 <label>Operation</label>
             </div>
             <div class="value-box-labels">
                 <label>Value</label>
             </div>
-        </div>
-        <div *ngFor="let item of formItems.controls; let builderIndex=index" [formGroupName]="builderIndex">
+        </div> -->
+        <!-- <div *ngFor="let item of formItems.controls; let builderIndex=index" [formGroupName]="builderIndex">
             <div class="query-builder-controls">
                 <div class="add-button-control">
-                    <!-- add button for each selected activity -->
-                    <a (click)="addItem(builderIndex)">
+                    <a (click)="addNewItemInExistingQuery(builderIndex)">
                         <i class="fa fa-plus" style="font-size:16px;color:rgb(107, 155, 218)" aria-hidden="true"></i>
                     </a>
-                    <!-- add button for each selected activity -->
                 </div>
                 <div class="close-button-control">
-                    <!-- close button for each selected activity -->
                     <a (click)="removeItem(builderIndex)">
                         <i class="fa fa-times" style="font-size:16px;color:rgb(231, 103, 28)" aria-hidden="true"></i>
                     </a>
-                    <!-- close button for each selected activity -->
                 </div>
                 <div class="group-check-box-control">
-                    <dx-check-box formControlName="IsCheckedForGrouping">
+                    <dx-check-box formControlName="IsCheckedForGrouping" (onValueChanged)="onGroupCreationCheckBoxChecked($event, builderIndex)">
                     </dx-check-box>
-                    <!-- [disabled]="checkActivityIsRejectedOrNot(activityIndex)" -->
                 </div>
-                <div class="operation-box-control" *ngIf="builderIndex > 0">
+                <div *ngFor="let group of queryGroups | keyvalue"
+                    [ngClass]="{'group-brackets': group?.value?.includes(builderIndex)}">
+                    <span *ngIf="(group?.value?.includes(builderIndex)) && (group?.value?.indexOf(builderIndex) === 0)"> ( </span>
+                </div>
+                <div class="operation-box-control" [ngClass]="{'first-operation': builderIndex === 0}">
                     <dx-select-box [dataSource]="operationDataSource" formControlName="Operation"
-                        displayExpr="OperationName" valueExpr="OperationID" width="200" [searchEnabled]="true">
+                        [visible]="builderIndex > 0" displayExpr="OperationName" valueExpr="OperationID" width="200"
+                        [searchEnabled]="true" (onValueChanged)="onOperationOptionChanged($event)">
                     </dx-select-box>
                 </div>
                 <div class="field-box-control">
@@ -67,17 +67,133 @@
                 </div>
                 <div class="operator-box-control">
                     <dx-select-box [dataSource]="availableOperatorDataSource" formControlName="Operator"
-                        displayExpr="OperatorName" valueExpr="OperatorID" width="200" [searchEnabled]="true">
+                        displayExpr="OperatorName" valueExpr="OperatorID" width="200" [searchEnabled]="true"
+                        (onValueChanged)="onOperatorOptionChanged($event)">
                     </dx-select-box>
                 </div>
                 <div class="value-box-control">
-                    <app-filter-builder-form-control formControlName="QueryValue"
-                        [fieldTypeID]="valueSelectionAccordingToFieldSelected(builderIndex).Field"
-                        [disabled]="!valueSelectionAccordingToFieldSelected(builderIndex).Field">
+                    <app-filter-builder-form-control formControlName="QueryValue" [formControlIndex]="builderIndex"
+                        [fieldTypeID]="getValuesFromQueryFormControlByIndex(builderIndex).Field"
+                        [disabled]="!getValuesFromQueryFormControlByIndex(builderIndex).Field"
+                        (onQueryValueChanged)="onQueryValueChanged($event, builderIndex)">
                     </app-filter-builder-form-control>
                 </div>
+                <div *ngFor="let group of queryGroups | keyvalue"
+                    [ngClass]="{'group-brackets': group?.value?.includes(builderIndex)}">
+                    <span *ngIf="(group?.value?.includes(builderIndex)) && (group?.value?.indexOf(builderIndex) === (group?.value?.length - 1))"> ) </span>
+                </div>
             </div>
-        </div>
+        </div> -->
+
+        <table>
+            <thead class="query-builder-labels">
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th class="group-check-box-labels" [ngClass]="{'group-creation-disabled': !isReadyToCreateANewGroup}">
+                    <label (click)="createNewGroup()">(=)</label>
+                </th>
+                <th *ngFor="let group of sortedQueryGroupsKeys | keyvalue">
+                </th>
+                <th class="operation-box-labels">
+                    <label>AND/OR</label>
+                </th>
+                <th class="field-box-labels">
+                    <label>Field</label>
+                </th>
+                <th class="operator-box-labels">
+                    <label>Operation</label>
+                </th>
+                <th class="value-box-labels">
+                    <label>Value</label>
+                </th>
+            </thead>
+            <tbody>
+                <tr class="query-builder-controls" *ngFor="let item of formItems.controls; let builderIndex=index"
+                    [formGroupName]="builderIndex">
+                    <td class="w-3">
+                        <a (click)="addNewItemInExistingQuery(builderIndex)">
+                            <i class="fa fa-plus" style="font-size:16px;color:rgb(107, 155, 218)"
+                                aria-hidden="true"></i>
+                        </a>
+                    </td>
+                    <td class="w-3">
+                        <a (click)="removeItem(builderIndex)">
+                            <i class="fa fa-times" style="font-size:16px;color:rgb(231, 103, 28)"
+                                aria-hidden="true"></i>
+                        </a>
+                    </td>
+                    <td class="w-3">
+                        <a (click)="moveCurrentQueryUp(builderIndex)"
+                            *ngIf="!(builderIndex === 0)">
+                            <i class="fa fa-long-arrow-up" style="font-size:16px;color:rgb(167 181 199)"
+                                aria-hidden="true"></i>
+                        </a>
+                    </td>
+                    <td class="w-3">
+                        <a (click)="moveCurrentQueryDown(builderIndex)"
+                            *ngIf="!(builderIndex === formItems?.controls?.length - 1)">
+                            <i class="fa fa-long-arrow-down" style="font-size:16px;color:rgb(167 181 199)"
+                                aria-hidden="true"></i>
+                        </a>
+                    </td>
+                    <td class="w-3">
+                        <dx-check-box formControlName="IsCheckedForGrouping"
+                            (onValueChanged)="onGroupCreationCheckBoxChecked($event, builderIndex)">
+                        </dx-check-box>
+                    </td>
+                    <td *ngFor="let group of sortedQueryGroupsKeys" class="left-border"
+                        [ngClass]="{'group-starting-bracket': queryGroups[group]?.includes(builderIndex),
+                            'top-border': (queryGroups[group]?.includes(builderIndex)) && (queryGroups[group]?.indexOf(builderIndex) === 0), 
+                            'bottom-border': (queryGroups[group]?.includes(builderIndex)) && (queryGroups[group]?.indexOf(builderIndex) === (queryGroups[group]?.length - 1))}">
+                        <span
+                            *ngIf="(queryGroups[group]?.includes(builderIndex)) && (queryGroups[group]?.indexOf(builderIndex) === 0)">
+                            (
+                            <a (click)="removeCreatedGroup(group)">
+                                <i class="fa fa-minus-circle" style="font-size:14px;color:rgb(191 178 168)"
+                                    aria-hidden="true"></i>
+                            </a>
+                        </span>
+
+                    </td>
+                    <td class="w-15" [ngClass]="{'first-operation': builderIndex === 0}">
+                        <dx-select-box [dataSource]="operationDataSource" formControlName="Operation"
+                            [visible]="builderIndex > 0" displayExpr="OperationName" valueExpr="OperationID"
+                            [searchEnabled]="true" (onValueChanged)="onOperationOptionChanged($event)">
+                        </dx-select-box>
+                    </td>
+                    <td class="w-15">
+                        <dx-select-box [dataSource]="fieldDataSource" formControlName="Field" displayExpr="FieldTitle"
+                            valueExpr="FieldTypeID" [searchEnabled]="true"
+                            (onValueChanged)="onFieldOptionChanged($event)">
+                        </dx-select-box>
+                    </td>
+                    <td class="w-15">
+                        <dx-select-box [dataSource]="availableOperatorDataSource" formControlName="Operator"
+                            displayExpr="OperatorName" valueExpr="OperatorID" [searchEnabled]="true"
+                            (onValueChanged)="onOperatorOptionChanged($event)">
+                        </dx-select-box>
+                    </td>
+                    <td class="w-40">
+                        <app-filter-builder-form-control formControlName="QueryValue" [formControlIndex]="builderIndex"
+                            [fieldTypeID]="getValuesFromQueryFormControlByIndex(builderIndex).Field"
+                            [disabled]="!getValuesFromQueryFormControlByIndex(builderIndex).Field"
+                            (onQueryValueChanged)="onQueryValueChanged($event, builderIndex)">
+                        </app-filter-builder-form-control>
+                        <!-- [controlValue]="getValuesFromQueryFormControlByIndex(builderIndex).QueryValue" -->
+                    </td>
+                    <td *ngFor="let group of sortedQueryGroupsKeys?.slice()?.reverse()" class="right-border"
+                        [ngClass]="{'group-brackets': queryGroups[group]?.includes(builderIndex),
+                            'top-border': (queryGroups[group]?.includes(builderIndex)) && (queryGroups[group]?.indexOf(builderIndex) === 0),
+                            'bottom-border': (queryGroups[group]?.includes(builderIndex)) && (queryGroups[group]?.indexOf(builderIndex) === (queryGroups[group]?.length - 1))}">
+                        <span
+                            *ngIf="(queryGroups[group]?.includes(builderIndex)) && (queryGroups[group]?.indexOf(builderIndex) === (queryGroups[group]?.length - 1))">
+                            ) </span>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
 
         <div class="add-new-button">
             <dx-button class="add-activity" type="success" text="Add New" (click)="addNewItem()"></dx-button>
@@ -86,3 +202,8 @@
           Activity and checkboxes for required/Oprional to select -->
     </div>
 </form>
+
+<div style="padding: 1em 0 2em 0">
+    <b>Filter Criteria</b><br>
+    <p class="filter-expression" [innerHTML]="filterExpression"></p>
+</div>

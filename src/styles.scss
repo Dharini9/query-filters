@@ -1,1 +1,19 @@
 /* You can add global styles to this file, and also import other style files */
+
+.operation, .operator {
+    font-weight: bold;
+}
+.parentheses {
+    font-weight: bold;
+}
+.skill-value {
+    font-style: italic;
+}
+
+.first-operation {
+    padding: 0 115px 0 !important; 
+}
+
+.dx-tag-content {
+    white-space: nowrap !important;
+  }

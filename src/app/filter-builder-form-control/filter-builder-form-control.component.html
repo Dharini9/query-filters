@@ -1,38 +1,77 @@
 <div *ngIf="currentQueryControl">
     <div [ngSwitch]="currentQueryControl.ControlType">
         <div *ngSwitchCase="availableFieldsControlTypes.AutoComplete">
-            <dx-select-box [dataSource]="fieldDataSource" displayExpr="FieldTitle" valueExpr="FieldTypeID" width="200"
-                [searchEnabled]="true" width="200" (onValueChanged)="onValueChanged($event, currentQueryControl.ControlType)"
-                [disabled]="disabled">
+            <dx-select-box [dataSource]="dataSourceForSelectionType" [displayExpr]="currentQueryControl.DisplayExpr"
+                [valueExpr]="currentQueryControl.ValueExpr" width="200" [searchEnabled]="true" width="200"
+                (onValueChanged)="onValueChanged($event, currentQueryControl.FieldTypeID)" [disabled]="disabled">
             </dx-select-box>
         </div>
         <div *ngSwitchCase="availableFieldsControlTypes.TreeView">
-            firstname
+            <dx-drop-down-box fieldTemplate="fieldTemplate"
+                (onOpened)="onTagBoxOpened($event)" [showDropDownButton]="true">
+                <div *dxTemplate="let data of 'content'">
+                    <dx-tree-view #skillsTreeView [dataSource]="treeDataSource" [height]="300"
+                        [showScrollbar]="true" [selectByClick]="true" [showCheckBoxesMode]="'normal'"
+                        [searchEnabled]="true" searchMode="contains"
+                        [selectNodesRecursive]="true" keyExpr="id" dataStructure="plain" parentIdExpr="categoryId"
+                        valueExpr="id" displayExpr="text" [expandAllEnabled]="true"
+                        (onItemSelectionChanged)="treeView_itemSelectionChanged($event)"
+                        (onItemRendered)="onTreeViewItemRendered($event)">
+                    </dx-tree-view>
+                </div>
+                <div *dxTemplate="let data of 'fieldTemplate'">
+                    <dx-tag-box [(value)]="treeViewTagBoxValueIDs" [dataSource]="treeDataSource"
+                        placeholder="localizationLabels EnterOptionalKeywords" valueExpr="id" displayExpr="text"
+                        [multiline]="true" [openOnFieldClick]="false"
+                        (onSelectionChanged)="onTagBoxSelectionChanged($event)"
+                        (onValueChanged)="onValueChanged($event, currentQueryControl.FieldTypeID)"
+                        tagTemplate="tagTemplate">
+                        <div *dxTemplate="let tag of 'tagTemplate'">
+                            <div [id]="'tag_'+tag.id+'_at_'+formControlIndex" (mouseover)="showToolTip(tag,'tag_'+tag.id+'_at_'+formControlIndex)"
+                                (mouseout)="hideToolTip()">
+                                <div class="dx-tag-content"><span>{{tag.text}}</span>
+                                    <div class="dx-tag-remove-button" (click)="removeSkillTag(tag)"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </dx-tag-box>
+                </div>
+            </dx-drop-down-box>
         </div>
         <div *ngSwitchCase="availableFieldsControlTypes.TagBox">
-            <dx-tag-box #ScheduleActivityTagBox [dataSource]="fieldDataSource" placeholder="Select" [multiline]="false"
-                displayExpr="FieldTitle" width="200" valueExpr="FieldTypeID" [showSelectionControls]="true"
-                [disabled]="disabled" (onValueChanged)="onValueChanged($event, currentQueryControl.ControlType)">
+            <dx-tag-box #ScheduleActivityTagBox [dataSource]="dataSourceForSelectionType" placeholder="Select"
+                [multiline]="false" [displayExpr]="currentQueryControl.DisplayExpr" width="200"
+                [valueExpr]="currentQueryControl.ValueExpr" [showSelectionControls]="true" [disabled]="disabled"
+                (onValueChanged)="onValueChanged($event, currentQueryControl.FieldTypeID)">
             </dx-tag-box>
         </div>
         <div *ngSwitchCase="availableFieldsControlTypes.TextBox">
             <dx-text-box [disabled]="disabled"
-                (onValueChanged)="onValueChanged($event, currentQueryControl.ControlType)"></dx-text-box>
+                (onValueChanged)="onValueChanged($event, currentQueryControl.FieldTypeID)"></dx-text-box>
         </div>
         <div *ngSwitchCase="availableFieldsControlTypes.SelectBox">
-            <dx-select-box [dataSource]="fieldDataSource" width="200" displayExpr="FieldTitle" valueExpr="FieldTypeID" width="200"
-                [searchEnabled]="true" (onValueChanged)="onValueChanged($event)" [disabled]="disabled"
-                (onValueChanged)="onValueChanged($event, currentQueryControl.ControlType)">
+            <dx-select-box [dataSource]="dataSourceForSelectionType" width="200"
+                [displayExpr]="currentQueryControl.DisplayExpr" [valueExpr]="currentQueryControl.ValueExpr" width="200"
+                [searchEnabled]="true" (onValueChanged)="onValueChanged($event, currentQueryControl.FieldTypeID)"
+                [disabled]="disabled">
             </dx-select-box>
         </div>
         <div *ngSwitchCase="availableFieldsControlTypes.DateBox">
             <dx-date-box [appDate] formControlName="StartDate" width="200" [type]="currentQueryControl?.DateControlType"
                 [displayFormat]="dateDisplayFormatAccordingAllDayEvent" (onClosed)="startDateValueChanged($event)"
-                (onValueChanged)="onValueChanged($event, currentQueryControl.ControlType)">
+                (onValueChanged)="onValueChanged($event, currentQueryControl.FieldTypeID)">
             </dx-date-box>
         </div>
     </div>
 </div>
+
+<dx-tooltip #skillCatagoryTooltip [position]="'top'">
+    <div *ngIf="catagoryInfoTooltip">
+        <div style="float:left">{{catagoryInfoTooltip.rootCategory}}</div><br />
+        <div style="float:left"><span style='font-size:15px;font-weight: 500'>&#8627;</span>
+            {{' '+catagoryInfoTooltip.parentCategory}}</div>
+    </div>
+</dx-tooltip>
 
 <!-- <dx-select-box [dataSource]="fieldDataSource" displayExpr="FieldTitle" valueExpr="FieldTypeID"
     width="200" [searchEnabled]="true" (onValueChanged)="onValueChanged($event)">
